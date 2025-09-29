@@ -22,7 +22,7 @@ async def chat_stream_generator(question:str):
             model="qwen3-max-preview",
             stream=True,
             messages=[
-                {"role": "system", "content": "你是一名Java技术专家，只为用户生成Java代码，其他问题一律回复：我不知道"},
+                {"role": "system", "content": "你是一名Java技术专家，只为用户生成Java代码"},
                 {"role": "user", "content": question},
             ],
         )
