@@ -1,3 +1,5 @@
+import time
+
 from fastapi import FastAPI
 
 from routers.exception import UnicornException
@@ -9,7 +11,7 @@ from routers.header.url import header
 from routers.response_model.url import response_model
 from routers.error.url import error
 
-from fastapi import APIRouter, Request
+from fastapi import Request
 from fastapi.responses import JSONResponse
 ##https://fastapi.tiangolo.com/zh/tutorial/schema-extra-example/#pydantic-schema_extra
 app = FastAPI()
@@ -29,9 +31,15 @@ app.include_router(error, prefix="/error", tags=["error"])
 async def unicorn_exception_handler(request: Request, exc: UnicornException):
     return JSONResponse(
         status_code=418,
-        content={"message": f"Oops! {exc.name} did something. There goes a rainbow..."},
+        content={"message": f"Oops! {exc.name} did something. There goes a rainbow...",
+                 "code": 500},
     )
-
+from routers.middleware import add_process_time_header
+from routers.exception.exception_handler import unicorn_exception_handler
+##http拦截器
+app.middleware("http")(add_process_time_header)
+##异常补货
+app.add_exception_handler(UnicornException, unicorn_exception_handler)
 
 # 启动应用（用于直接运行）
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
-class UnicornException(Exception):
-    def __init__(self, name: str):
-        self.name = name
+from .exception_handler import unicorn_exception_handler
+from .exception import UnicornException
+
+__all__ = ["unicorn_exception_handler" , "UnicornException"]
